@@ -37,17 +37,23 @@ class Student:
               f"Завершенные курсы:{','.join(self.finished_courses)}"
         return res
 
-    def compare_rates(self, student_two):
+    def __eq__(self, student_two):
         if isinstance(student_two,Student):
-            if self.__avg_rate(self.grades) > self.__avg_rate(student_two.grades):
-                print(f"Средний бал {self.name} {self.surname} больше {student_two.name} {student_two.surname}")
-            elif self.__avg_rate(self.grades) < self.__avg_rate(student_two.grades):
-                print(f"Средний бал {student_two.name} {student_two.surname} больше {self.name} {self.surname}")
-            else:
-                print("Средний бал студентов одинаков")
+             return self.__avg_rate(self.grades) == student_two.__avg_rate(student_two.grades)
         else:
-            return "Error"
+            return
 
+    def __gt__(self, student_two):
+        if isinstance(student_two,Student):
+            return self.__avg_rate(self.grades) == student_two.__avg_rate(student_two.grades)
+        else:
+            return
+
+    def __lt__(self, student_two):
+        if isinstance(student_two,Student):
+             return self.__avg_rate(self.grades) < student_two.__avg_rate(student_two.grades)
+        else:
+            return
 
 class Mentor:
     def __init__(self, name, surname):
@@ -77,16 +83,30 @@ class Lecturer(Mentor):
         name = f"Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции:{self.avg_rate(self.grades)}"
         return name
 
-    def compare_rates(self, lecturer_two):
-        if isinstance(lecturer_two,Lecturer):
-            if self.__avg_rate(self.grades) > self.__avg_rate(lecturer_two.grades):
-                print(f"Средний бал {self.name} {self.surname} больше {lecturer_two.name} {lecturer_two.surname}")
-            elif self.__avg_rate(self.grades) < self.__avg_rate(lecturer_two.grades):
-                print(f"Средний бал {lecturer_two.name} {lecturer_two.surname} больше {self.name} {self.surname}")
-            else:
-                print("Средний бал лекторов одинаков")
+    def __str__(self):
+        res = f"Имя: {self.name}\nФамилия: {self.surname}\n" \
+              f"Средняя оценка за домашние задания:{self.__avg_rate(self.grades)}\n" \
+              f"Курсы в процессе изучения:{','.join(self.courses_in_progress)}\n" \
+              f"Завершенные курсы:{','.join(self.finished_courses)}"
+        return res
+
+    def __eq__(self, lecturer_two):
+        if isinstance(lecturer_two, Lecturer):
+            return self.__avg_rate(self.grades) == lecturer_two.__avg_rate(lecturer_two.grades)
         else:
-            return "Error"
+            return
+
+    def __gt__(self, lecturer_two):
+        if isinstance(lecturer_two, Lecturer):
+            return self.__avg_rate(self.grades) == lecturer_two.__avg_rate(lecturer_two.grades)
+        else:
+            return
+
+    def __lt__(self, lecturer_two):
+        if isinstance(lecturer_two, Lecturer):
+            return self.__avg_rate(self.grades) < lecturer_two.__avg_rate(lecturer_two.grades)
+        else:
+            return
 
 
 class Reviewer(Mentor):
@@ -134,8 +154,22 @@ first_reviewer.rate_hw(first_student,"Python",9)
 second_reviewer.rate_hw(second_student,"Databases",9)
 second_reviewer.rate_hw(first_student,"Databases",10)
 
-first_student.compare_rates(second_student)
-first_lecturer.compare_rates(second_lecturer)
+#сравнение лекторов по средней оценке за лекции
+if first_lecturer>second_lecturer:
+    print(f"Средняя оценка {first_lecturer.name} {first_lecturer.surname} больше чем {second_lecturer.name} {second_lecturer.surname}")
+elif first_student < second_student:
+    print(f"Средняя оценка {first_lecturer.name} {first_lecturer.surname} меньше чем {second_lecturer.name} {second_lecturer.surname}")
+else:
+    print(f"Средние оценки равны")
+
+#сравнение студентов по средней оценке за ДЗ
+if first_student>second_student:
+    print(f"Средняя оценка {first_student.name} {first_student.surname} больше чем {second_student.name} {second_student.surname}")
+elif first_student < second_student:
+    print(f"Средняя оценка {first_student.name} {first_student.surname} меньше чем {second_student.name} {second_student.surname}")
+else:
+    print(f"Средние оценки равны")
+
 
 list_students = [first_student, second_student]
 list_lecturers = [first_lecturer, second_lecturer]
